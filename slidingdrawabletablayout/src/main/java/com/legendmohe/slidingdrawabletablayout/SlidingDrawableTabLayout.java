@@ -16,6 +16,7 @@
 
 package com.legendmohe.slidingdrawabletablayout;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -26,22 +27,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.annotation.ColorInt;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.IntDef;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.util.Pools;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.TextViewCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.AppCompatDrawableManager;
+import android.text.Html;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -59,15 +45,32 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IntDef;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.AppCompatDrawableManager;
+import androidx.core.content.ContextCompat;
+import androidx.core.util.Pools;
+import androidx.core.view.GravityCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.widget.TextViewCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import static android.support.v4.view.ViewPager.SCROLL_STATE_DRAGGING;
-import static android.support.v4.view.ViewPager.SCROLL_STATE_IDLE;
-import static android.support.v4.view.ViewPager.SCROLL_STATE_SETTLING;
+import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_DRAGGING;
+import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE;
+import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_SETTLING;
 
 
 public class SlidingDrawableTabLayout extends HorizontalScrollView {
@@ -109,7 +112,8 @@ public class SlidingDrawableTabLayout extends HorizontalScrollView {
      */
     @IntDef(value = {MODE_SCROLLABLE, MODE_FIXED})
     @Retention(RetentionPolicy.SOURCE)
-    public @interface Mode {}
+    public @interface Mode {
+    }
 
     /**
      * Gravity used to fill the {@link SlidingDrawableTabLayout} as much as possible. This option only takes effect
@@ -133,7 +137,8 @@ public class SlidingDrawableTabLayout extends HorizontalScrollView {
      */
     @IntDef(flag = true, value = {GRAVITY_FILL, GRAVITY_CENTER})
     @Retention(RetentionPolicy.SOURCE)
-    public @interface TabGravity {}
+    public @interface TabGravity {
+    }
 
     /**
      * Callback interface invoked when a tab's selection state changes.
@@ -288,7 +293,6 @@ public class SlidingDrawableTabLayout extends HorizontalScrollView {
      * Sets the tab indicator's color for the currently selected tab.
      *
      * @param color color to use for the indicator
-     *
      * @attr ref android.support.design.R.styleable#TabLayout_tabIndicatorColor
      */
     public void setSelectedTabIndicatorColor(@ColorInt int color) {
@@ -299,7 +303,6 @@ public class SlidingDrawableTabLayout extends HorizontalScrollView {
      * Sets the tab indicator's height for the currently selected tab.
      *
      * @param height height to use for the indicator in pixels
-     *
      * @attr ref android.support.design.R.styleable#TabLayout_tabIndicatorHeight
      */
     public void setSelectedTabIndicatorHeight(int height) {
@@ -308,12 +311,12 @@ public class SlidingDrawableTabLayout extends HorizontalScrollView {
 
     /**
      * Set the scroll position of the tabs. This is useful for when the tabs are being displayed as
-     * part of a scrolling container such as {@link android.support.v4.view.ViewPager}.
+     * part of a scrolling container such as {@link ViewPager}.
      * <p>
      * Calling this method does not update the selected tab, it is only used for drawing purposes.
      *
-     * @param position current scroll position
-     * @param positionOffset Value from [0, 1) indicating the offset from {@code position}.
+     * @param position           current scroll position
+     * @param positionOffset     Value from [0, 1) indicating the offset from {@code position}.
      * @param updateSelectedText Whether to update the text's selected state.
      */
     public void setScrollPosition(int position, float positionOffset, boolean updateSelectedText) {
@@ -362,7 +365,7 @@ public class SlidingDrawableTabLayout extends HorizontalScrollView {
      * Add a tab to this layout. The tab will be inserted at <code>position</code>.
      * If this is the first tab to be added it will become the selected tab.
      *
-     * @param tab The tab to add
+     * @param tab      The tab to add
      * @param position The new position of the tab
      */
     public void addTab(@NonNull Tab tab, int position) {
@@ -372,7 +375,7 @@ public class SlidingDrawableTabLayout extends HorizontalScrollView {
     /**
      * Add a tab to this layout. The tab will be added at the end of the list.
      *
-     * @param tab Tab to add
+     * @param tab         Tab to add
      * @param setSelected True if the added tab should become the selected tab.
      */
     public void addTab(@NonNull Tab tab, boolean setSelected) {
@@ -390,8 +393,8 @@ public class SlidingDrawableTabLayout extends HorizontalScrollView {
     /**
      * Add a tab to this layout. The tab will be inserted at <code>position</code>.
      *
-     * @param tab The tab to add
-     * @param position The new position of the tab
+     * @param tab         The tab to add
+     * @param position    The new position of the tab
      * @param setSelected True if the added tab should become the selected tab.
      */
     public void addTab(@NonNull Tab tab, int position, boolean setSelected) {
@@ -409,7 +412,7 @@ public class SlidingDrawableTabLayout extends HorizontalScrollView {
     private void addTabFromItemView(@NonNull TabItem item) {
         final Tab tab = newTab();
         if (item.mText != null) {
-            tab.setText(item.mText);
+            tab.setText(Html.fromHtml(item.mText.toString()));
         }
         if (item.mIcon != null) {
             tab.setIcon(item.mIcon);
@@ -421,7 +424,7 @@ public class SlidingDrawableTabLayout extends HorizontalScrollView {
     }
 
     /**
-     * Set the {@link android.support.design.widget.TabLayout.OnTabSelectedListener} that will
+     * Set the {@link com.google.android.material.tabs.TabLayout.OnTabSelectedListener} that will
      * handle switching to and from tabs.
      *
      * @param onTabSelectedListener Listener to handle tab selection events
@@ -523,7 +526,7 @@ public class SlidingDrawableTabLayout extends HorizontalScrollView {
             removeTabViewAt(i);
         }
 
-        for (final Iterator<Tab> i = mTabs.iterator(); i.hasNext();) {
+        for (final Iterator<Tab> i = mTabs.iterator(); i.hasNext(); ) {
             final Tab tab = i.next();
             i.remove();
             tab.reset();
@@ -541,11 +544,10 @@ public class SlidingDrawableTabLayout extends HorizontalScrollView {
      * <li>{@link #MODE_SCROLLABLE}: Scrollable tabs display a subset of tabs at any given moment,
      * and can contain longer tab labels and a larger number of tabs. They are best used for
      * browsing contexts in touch interfaces when users don’t need to directly compare the tab
-     * labels. This mode is commonly used with a {@link android.support.v4.view.ViewPager}.</li>
+     * labels. This mode is commonly used with a {@link ViewPager}.</li>
      * </ul>
      *
      * @param mode one of {@link #MODE_FIXED} or {@link #MODE_SCROLLABLE}.
-     *
      * @attr ref android.support.design.R.styleable#TabLayout_tabMode
      */
     public void setTabMode(@Mode int mode) {
@@ -569,7 +571,6 @@ public class SlidingDrawableTabLayout extends HorizontalScrollView {
      * Set the gravity to use when laying out the tabs.
      *
      * @param gravity one of {@link #GRAVITY_CENTER} or {@link #GRAVITY_FILL}.
-     *
      * @attr ref android.support.design.R.styleable#TabLayout_tabGravity
      */
     public void setTabGravity(@TabGravity int gravity) {
@@ -672,8 +673,8 @@ public class SlidingDrawableTabLayout extends HorizontalScrollView {
 
     /**
      * @deprecated Use {@link #setupWithViewPager(ViewPager)} to link a MyTabLayout with a ViewPager
-     *             together. When that method is used, the MyTabLayout will be automatically updated
-     *             when the {@link PagerAdapter} is changed.
+     * together. When that method is used, the MyTabLayout will be automatically updated
+     * when the {@link PagerAdapter} is changed.
      */
     @Deprecated
     public void setTabsFromPagerAdapter(@Nullable final PagerAdapter adapter) {
@@ -717,7 +718,7 @@ public class SlidingDrawableTabLayout extends HorizontalScrollView {
         if (mPagerAdapter != null) {
             final int adapterCount = mPagerAdapter.getCount();
             for (int i = 0; i < adapterCount; i++) {
-                addTab(newTab().setText(mPagerAdapter.getPageTitle(i)), false);
+                addTab(newTab().setText(Html.fromHtml(mPagerAdapter.getPageTitle(i) == null ? "" : mPagerAdapter.getPageTitle(i).toString())), false);
             }
 
             // Make sure we reflect the currently set ViewPager item
@@ -1044,7 +1045,7 @@ public class SlidingDrawableTabLayout extends HorizontalScrollView {
         private SlidingDrawableTabLayout mParent;
         private TabView mView;
 
-        private Tab() {
+        public Tab() {
             // Private constructor
         }
 
@@ -1172,6 +1173,7 @@ public class SlidingDrawableTabLayout extends HorizontalScrollView {
          * @param resId A resource ID referring to the icon that should be displayed
          * @return The current instance for call chaining
          */
+        @SuppressLint("RestrictedApi")
         @NonNull
         public Tab setIcon(@DrawableRes int resId) {
             if (mParent == null) {
@@ -1521,7 +1523,7 @@ public class SlidingDrawableTabLayout extends HorizontalScrollView {
             final boolean hasText = !TextUtils.isEmpty(text);
             if (textView != null) {
                 if (hasText) {
-                    textView.setText(text);
+                    textView.setText(Html.fromHtml(text == null ? "" : text.toString()));
                     textView.setVisibility(VISIBLE);
                     setVisibility(VISIBLE);
                 } else {
@@ -1776,8 +1778,8 @@ public class SlidingDrawableTabLayout extends HorizontalScrollView {
 
 //            if (Math.abs(position - mSelectedPosition) <= 1) {
 //                // If the views are adjacent, we'll animate from edge-to-edge
-                startLeft = mIndicatorLeft;
-                startRight = mIndicatorRight;
+            startLeft = mIndicatorLeft;
+            startRight = mIndicatorRight;
 //            } else {
 //                // Else, we'll just grow from the nearest edge
 //                final int offset = dpToPx(MOTION_NON_ADJACENT_OFFSET);
