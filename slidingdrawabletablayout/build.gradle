@@ -1,29 +1,5 @@
 apply plugin: 'com.android.library'
 
-ext {
-    bintrayName = 'SlidingDrawableTabLayout'
-
-    publishedGroupId = 'com.pr.slidingdrawabletablayout'
-    libraryName = 'SlidingDrawableTabLayout'
-    artifact = 'SlidingDrawableTabLayout'
-
-    libraryDescription = 'TabLayout with drawable indicator'
-
-    siteUrl = 'https://github.com/trantuananh1996/SlidingDrawableTabLayout'
-    gitUrl = 'https://github.com/trantuananh1996/SlidingDrawableTabLayout.git'
-
-    libraryVersion = '1.0.0'
-
-    developerId = 'anhtt'
-    developerName = 'anhtt'
-    developerEmail = 'anhtt@omt.vn'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
-
-
 android {
     compileSdkVersion 29
 
@@ -47,13 +23,4 @@ dependencies {
     testImplementation 'junit:junit:4.13-beta-3'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.1.0-alpha10'
-//    implementation 'androidx.annotation:annotation:1.0.1'
-//    implementation 'androidx.recyclerview:recyclerview:1.0.0'
-//    implementation 'androidx.appcompat:appcompat:1.0.2'
-//    implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
-//    implementation 'androidx.cardview:cardview:1.0.0'
-//    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
-}
-repositories {
-    mavenCentral()
 }
