@@ -1,5 +1,27 @@
 apply plugin: 'com.android.library'
 
+ext {
+    bintrayName = 'SlidingDrawableTabLayout'
+
+    publishedGroupId = 'com.pr.slidingdrawabletablayout'
+    libraryName = 'SlidingDrawableTabLayout'
+    artifact = 'SlidingDrawableTabLayout'
+
+    libraryDescription = 'TabLayout with drawable indicator'
+
+    siteUrl = 'https://github.com/trantuananh1996/SlidingDrawableTabLayout'
+    gitUrl = 'https://github.com/trantuananh1996/SlidingDrawableTabLayout.git'
+
+    libraryVersion = '1.0.0'
+
+    developerId = 'anhtt'
+    developerName = 'anhtt'
+    developerEmail = 'anhtt@omt.vn'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
 
 
 android {
