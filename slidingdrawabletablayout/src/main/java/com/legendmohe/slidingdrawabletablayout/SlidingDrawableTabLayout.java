@@ -53,6 +53,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.AppCompatDrawableManager;
 import androidx.core.content.ContextCompat;
 import androidx.core.util.Pools;
@@ -1606,8 +1607,18 @@ public class SlidingDrawableTabLayout extends HorizontalScrollView {
 
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SlidingDrawableTabLayout,
                     defStyleAttr, -1);
+            try {
+                //For android 4
+                mSlidingDrawable = AppCompatResources.getDrawable(getContext(), a.getResourceId(0, R.styleable.SlidingDrawableTabLayout_slidingBackground));
+            } catch (Throwable e) {
 
-            mSlidingDrawable = a.getDrawable(R.styleable.SlidingDrawableTabLayout_slidingBackground);
+            }
+            try {
+                //Override for android above 4. It will throw an exception on android 4
+                mSlidingDrawable = a.getDrawable(R.styleable.SlidingDrawableTabLayout_slidingBackground);
+            } catch (Throwable e) {
+
+            }
             if (mSlidingDrawable == null)
                 mSlidingDrawable = ContextCompat.getDrawable(getContext(), android.R.color.transparent);
         }
